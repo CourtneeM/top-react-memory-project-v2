@@ -1,42 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HeaderBar from './Components/HeaderBar';
 import Card from './Components/Card';
-import img1 from '../src/images/the_knight.webp';
-import img2 from '../src/images/hornet.webp';
-import img3 from '../src/images/grimm.webp';
-import img4 from '../src/images/zote.webp';
-import img5 from '../src/images/paintmaster.webp';
+import imageData from './imageData';
+
 
 function App() {
-  const [images, setImages] = useState([
-    { name: 'The Knight',
-      src: img1,
-      clicked: false,
-    },
-    {
-      name: 'Hornet',
-      src: img2,
-      clicked: false,
-    },
-    {
-      name: 'Grimm',
-      src: img3,
-      clicked: false,
-    },
-    {
-      name: 'Zote',
-      src: img4,
-      clicked: false,
-    },
-    {
-      name: 'Paintmaster',
-      src: img5,
-      clicked: false,
-    },
-  ]);
+  const [images, setImages] = useState(imageData);
 
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+
+  useEffect(() => {
+    const randomizeImages = () => {
+      const imagesCopy = [...images];
+      const randomizedImages = [];
+  
+      while (imagesCopy.length > 0) {
+        randomizedImages.push(imagesCopy.splice(Math.floor(Math.random() * imagesCopy.length), 1)[0])
+      }
+  
+      setImages(randomizedImages);
+    }
+
+    randomizeImages();
+  }, [score]);
 
   const incrementScore = () => setScore(score + 1);
   const resetScore = () => setScore(0);
@@ -63,8 +50,8 @@ function App() {
       resetScore();
       resetImageClicks();
     } else {
-      incrementScore();
       markImageClicked(i);
+      incrementScore();
     }
   }
 
